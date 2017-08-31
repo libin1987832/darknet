@@ -28,8 +28,8 @@ static network net;
 static image buff [3];
 static image buff_letter[3];
 static int buff_index = 0;
-static CvCapture * cap;
-static IplImage  * ipl;
+static CvCapture *cap;
+static IplImage   *ipl;
 static float fps = 0;
 static float demo_thresh = 0;
 static float demo_hier = .5;
@@ -228,12 +228,12 @@ int kbhit(void)
 	return 0;
 }
 
-void demo(char *cfgfile, char *weightfile, float thresh, char* cam_index, const char *filename_video, char **names, int classes, int delay, char *prefix, int avg_frames, float hier, int w, int h, int frames, int fullscreen)
+void demo(char *cfgfile, char *weightfile, float thresh, char *cam_index, const char *filename_video, char **names, int classes, int delay, char *prefix, int avg_frames, float hier, int w, int h, int frames, int fullscreen)
 {
 
 	demo_delay = delay;
 	demo_frame = avg_frames;
-	predictions = calloc(demo_frame, sizeof(float*));
+	predictions = calloc(demo_frame, sizeof(float *));
 	image **alphabet = load_alphabet();
 	demo_names = names;
 	demo_alphabet = alphabet;
@@ -388,15 +388,15 @@ void demo(char *cfgfile, char *weightfile, float thresh, char* cam_index, const 
 			//save_image(buff[(buff_index + 1)%3], name);
 		}
 		printf("thread join\n");
-  struct timespec ts;
-	clock_gettime(CLOCK_REALTIME, &ts);
-	ts.tv_sec += 5;
-	 int s = pthread_timedjoin_np(fetch_thread, NULL, &ts);
-	 if(0!=s)
-	 {
-					 printf("capture timeOut so exit\n");
-					 exit(0);
-	 }
+		struct timespec ts;
+		clock_gettime(CLOCK_REALTIME, &ts);
+		ts.tv_sec += 5;
+		int s = pthread_timedjoin_np(fetch_thread, NULL, &ts);
+		if (0 != s)
+		{
+			printf("capture timeOut again \n");
+			demo_done = 1;
+		}
 		//pthread_join(fetch_thread, 0);
 		pthread_join(detect_thread, 0);
 		display_in_thread(0);
